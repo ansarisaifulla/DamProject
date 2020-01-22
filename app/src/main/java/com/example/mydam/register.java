@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,8 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class register extends AppCompatActivity {
+public class register extends AppCompatActivity  implements AdapterView.OnItemSelectedListener{
 
+    Spinner spinner;
     EditText txt_fullname,txt_username,txt_email,txt_password;
     Button btn_register;
     EditText txt_confirmpassword;
@@ -27,7 +31,7 @@ public class register extends AppCompatActivity {
     DatabaseReference databaseReference;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth firebaseAuth;
-    String gender="";
+    String gender="",spin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,13 @@ public class register extends AppCompatActivity {
         btn_register=(Button)findViewById(R.id.btn_register);
         radiogendermale=(RadioButton)findViewById(R.id.radio_gendermale);
         radiogenderfemale=(RadioButton)findViewById(R.id.radio_genderfemale);
+        spinner =findViewById(R.id.spinner);
+        String[] items = new String[]{"Khadakwasla", "begdewadi", "pawna","mulshi"};
+
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,items);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
 
         databaseReference=FirebaseDatabase.getInstance().getReference("user");
         firebaseAuth=FirebaseAuth.getInstance();
@@ -61,6 +72,7 @@ public class register extends AppCompatActivity {
                 if (radiogenderfemale.isChecked()) {
                     gender = "Female";
                 }
+
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(register.this, "Please Enter Email", Toast.LENGTH_LONG).show();
@@ -102,8 +114,8 @@ public class register extends AppCompatActivity {
                                                 fullname,
                                                 username,
                                                 email,
-                                                gender
-
+                                                gender,
+                                                spin
                                         );
 
                                         FirebaseDatabase.getInstance().getReference("user")
@@ -139,5 +151,16 @@ public class register extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+         spin=parent.getItemAtPosition(position).toString();
+        Toast.makeText(register.this,spin,Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
 
