@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String email=txtemail.getText().toString().trim();
-                String password=txtpassword.getText().toString().trim();
+                final String email=txtemail.getText().toString().trim();
+                final String password=txtpassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email))
                 {
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (password.length() < 6) {
                     Toast.makeText(MainActivity.this, "password too short(password length should be greater than 6)", Toast.LENGTH_LONG).show();
-
                 }
 
                 firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -64,17 +63,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-
-                                    Intent i=new Intent(MainActivity.this,MainActivity.class);
+                                    Intent i=new Intent(MainActivity.this,LoginSuccess.class);
+                                    i.putExtra("EXTRA_MESSAGE", email);
                                     startActivity(i);
-
-
                                 } else {
-                                    Toast.makeText(MainActivity.this,"Login Failed",Toast.LENGTH_LONG).show();
-
+                                    Toast.makeText(MainActivity.this,"Incorrect credentials",Toast.LENGTH_LONG).show();
                                 }
-
-                                // ...
                             }
                         });
 
